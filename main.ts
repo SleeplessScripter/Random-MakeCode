@@ -11,7 +11,11 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Projectile, function (sprite, ot
 })
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSprite) {
     otherSprite.destroy()
-    info.changeLifeBy(-1)
+    if (info.countdown() < 3) {
+        info.changeScoreBy(Math.abs(200 * info.highScore()))
+    } else {
+        info.changeLifeBy(-1)
+    }
 })
 let projectile2: Sprite = null
 let projectile: Sprite = null
@@ -48,5 +52,7 @@ forever(function () {
     150,
     true
     )
-    pause(2100)
+    if (info.countdown() > 3.5) {
+        pause(2100)
+    }
 })
