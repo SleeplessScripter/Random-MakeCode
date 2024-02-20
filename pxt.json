@@ -1,5 +1,5 @@
 {
-    "name": "Animate It! #2",
+    "name": "Hacker Defense - Thomas Carlisle",
     "description": "",
     "dependencies": {
         "device": "*",
@@ -12,7 +12,9 @@
         "assets.json",
         "images.g.jres",
         "images.g.ts",
-        "pxt.json"
+        "pxt.json",
+        "tilemap.g.jres",
+        "tilemap.g.ts"
     ],
     "testFiles": [
         "test.ts"

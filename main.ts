@@ -12,43 +12,198 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Projectile, function (sprite, ot
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSprite) {
     otherSprite.destroy()
     if (info.countdown() < 3) {
-        info.changeScoreBy(Math.abs(200 * info.highScore()))
+        Score = 200 * info.highScore()
+        info.setScore(Math.abs(Score))
     } else {
         info.changeLifeBy(-1)
     }
 })
-let projectile2: Sprite = null
-let projectile: Sprite = null
+let Enemy_Attacks: Sprite = null
+let Coin: Sprite = null
+let Score = 0
 scene.setBackgroundImage(assets.image`Freeway`)
-let mySprite = sprites.create(assets.image`Mama`, SpriteKind.Player)
-controller.moveSprite(mySprite, 0, 100)
-mySprite.setStayInScreen(true)
+let Player_Character = sprites.create(assets.image`Mama`, SpriteKind.Player)
+controller.moveSprite(Player_Character, 50, 50)
+Player_Character.setStayInScreen(true)
 scroller.scrollBackgroundWithSpeed(-50, 0)
 info.startCountdown(15)
 animation.runImageAnimation(
-mySprite,
+Player_Character,
 assets.animation`Mama Moving`,
 150,
 true
 )
 forever(function () {
-    projectile = sprites.createProjectileFromSide(assets.image`Baby`, -90, 0)
-    projectile.y = randint(15, 115)
+    Coin = sprites.createProjectileFromSide(assets.image`Coin`, -90, 0)
+    Coin.y = randint(15, 115)
     animation.runImageAnimation(
-    projectile,
-    assets.animation`Animated Baby`,
+    Coin,
+    assets.animation`Animated Coin`,
     100,
     true
     )
     pause(1000)
 })
 forever(function () {
-    projectile2 = sprites.createProjectileFromSide(assets.image`Tourist`, -90, 0)
-    projectile2.y = randint(15, 115)
-    projectile2.setKind(SpriteKind.Enemy)
+    Enemy_Attacks = sprites.createProjectileFromSide(assets.image`Worm Virus`, -90, 0)
+    Enemy_Attacks.y = randint(15, 115)
+    Enemy_Attacks.setKind(SpriteKind.Enemy)
     animation.runImageAnimation(
-    projectile2,
-    assets.animation`Animated Tourist`,
+    Enemy_Attacks,
+    [img`
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . a a . 
+        . . . . . . . . . . . . a a a a 
+        a a a . . . . . . . . a a a a a 
+        1 1 a a a a a a a a a a a a a a 
+        . . 3 a a a a a a a a a a a a a 
+        . . 3 a a a a a a a a a a a a . 
+        1 1 a a a a a a a a a a a a . . 
+        a a a . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        `,img`
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . a 
+        . . . . . . . . . . . . . a a a 
+        a a a . . . . . . . . . a a a a 
+        1 1 a a a a a a a a a a a a a a 
+        . . 3 a a a a a a a a a a a a a 
+        . . 3 a a a a a a a a a a a a . 
+        1 1 a a a a a a a a a a a a . . 
+        a a a . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        `,img`
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . a 
+        a a a . . . . . . . . . . a a a 
+        1 1 a a a a a a a a a a a a a a 
+        . . 3 a a a a a a a a a a a a a 
+        . . 3 a a a a a a a a a a a a . 
+        1 1 a a a a a a a a a . . . . . 
+        a a a . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        `,img`
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . a 
+        a a a . . . . . . . . . . a a a 
+        1 1 a a a a a a a a a a a a a a 
+        . . 3 a a a a a a a a a a a a a 
+        . . 3 a a a a a a a a a a a a a 
+        1 1 a a a a a a a a a a a a a a 
+        a a a . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        `,img`
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        a a a . . . . . . . . . . . . . 
+        1 1 a a a a a a a a a a a a a a 
+        . . 3 a a a a a a a a a a a a a 
+        . . 3 a a a a a a a a a a a a a 
+        1 1 a a a a a a a a a a a a a a 
+        a a a . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        `,img`
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        a a a . . . . . . . . . . . . . 
+        1 1 a a a a a a a a a a a a . . 
+        . . 3 a a a a a a a a a a a a a 
+        . . 3 a a a a a a a a a a a a a 
+        1 1 a a a a a a a a a a a a a a 
+        a a a . . . . . . . . . . . a . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        `,img`
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        a a a . . . . . . . . . . . . . 
+        1 1 a a a a a a a a a a a . . . 
+        . . 3 a a a a a a a a a a a . . 
+        . . 3 a a a a a a a a a a a a a 
+        1 1 a a a a a a a a a a a a a a 
+        a a a . . . . . . . . . a a a a 
+        . . . . . . . . . . . . . a a a 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        `,img`
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        a a a . . . . . . . . . . . . . 
+        1 1 a a a a a a a a a a a . . . 
+        . . 3 a a a a a a a a a a a . . 
+        . . 3 a a a a a a a a a a a a . 
+        1 1 a a a a a a a a a a a a a a 
+        a a a . . . . . . . . . a a a a 
+        . . . . . . . . . . . . . a a a 
+        . . . . . . . . . . . . . . a a 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        `,img`
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        a a a . . . . . . . . . . . . . 
+        1 1 a a a a a a a a a a . . . . 
+        . . 3 a a a a a a a a a a . . . 
+        . . 3 a a a a a a a a a a a . . 
+        1 1 a a a a a a a a a a a a a . 
+        a a a . . . . . . . . a a a a . 
+        . . . . . . . . . . . a a a a a 
+        . . . . . . . . . . . . a a a a 
+        . . . . . . . . . . . . . a a . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        `],
     150,
     true
     )
