@@ -3,7 +3,8 @@
     "description": "",
     "dependencies": {
         "device": "*",
-        "arcade-background-scroll": "github:microsoft/arcade-background-scroll/"
+        "arcade-background-scroll": "github:microsoft/arcade-background-scroll/",
+        "multiplayer": "*"
     },
     "files": [
         "main.blocks",
