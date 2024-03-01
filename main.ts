@@ -2,20 +2,28 @@ namespace SpriteKind {
     export const Shop_Item = SpriteKind.create()
 }
 controller.B.onEvent(ControllerButtonEvent.Pressed, function () {
+    Store = 1
     Countd = info.countdown()
     info.stopCountdown()
-    lif = info.life()
-    Store = 1
     effects.blizzard.startScreenEffect()
     pause(1500)
     scene.setBackgroundImage(assets.image`Store Background`)
     effects.blizzard.endScreenEffect()
-    Player_Character.setPosition(80, 100)
+    Player_Character.setPosition(80, 110)
     Speed__1 = sprites.create(assets.image`Speed 1`, SpriteKind.Shop_Item)
-    Speed__1.setPosition(28, 55)
+    Speed__1.setPosition(30, 55)
     Speed__2 = sprites.create(assets.image`Speed 2`, SpriteKind.Shop_Item)
     Speed__2.setPosition(60, 55)
+    Life__1 = sprites.create(assets.image`Heart 1`, SpriteKind.Shop_Item)
+    Life__1.setPosition(90, 55)
+    Life__3 = sprites.create(assets.image`Life 3`, SpriteKind.Shop_Item)
+    Life__3.setPosition(120, 55)
+    THE_SCRIPT = sprites.create(assets.image`THE SCRIPT`, SpriteKind.Shop_Item)
+    THE_SCRIPT.setPosition(75, 86)
 })
+function The_SCRIPT () {
+	
+}
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Projectile, function (sprite, otherSprite) {
     otherSprite.destroy()
     info.changeScoreBy(1)
@@ -23,7 +31,7 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Projectile, function (sprite, ot
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Shop_Item, function (sprite, otherSprite) {
     if (otherSprite == Speed__1 && Purchased_S1 == 0) {
         Purchased_S1 = 1
-        info.changeScoreBy(-10.7)
+        info.changeScoreBy(-10)
         controller.moveSprite(Player_Character, 75, 75)
         sprites.destroy(Speed__1)
         Speed__1 = sprites.create(img`
@@ -54,31 +62,68 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Shop_Item, function (sprite, oth
             22277.7777...77222
             `, SpriteKind.Shop_Item)
         Speed__1.setPosition(28, 55)
+    } else if (otherSprite == Speed__2 && Purchased_S2 == 0) {
+        Purchased_S2 = 1
+        info.changeScoreBy(-18)
+        controller.moveSprite(Player_Character, 100, 100)
+        sprites.destroy(Speed__2)
+        Speed__2 = sprites.create(assets.image`S2 Puc`, SpriteKind.Player)
+        Speed__2.setPosition(60, 55)
+    } else if (otherSprite == Life__1) {
+        Player_Character.setPosition(80, 110)
+        info.changeScoreBy(-5)
+        info.changeLifeBy(1)
+    } else if (otherSprite == Life__3) {
+        Player_Character.setPosition(80, 110)
+        info.changeScoreBy(-13)
+        info.changeLifeBy(3)
+    } else if (otherSprite == THE_SCRIPT) {
+        info.changeScoreBy(-40)
+        The_SCRIPT()
     }
 })
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSprite) {
     otherSprite.destroy()
     info.changeLifeBy(-1)
 })
+let place = 0
 let Enemy_Attacks: Sprite = null
 let Coin: Sprite = null
+let Purchased_S2 = 0
+let THE_SCRIPT: Sprite = null
+let Life__3: Sprite = null
+let Life__1: Sprite = null
 let Speed__2: Sprite = null
 let Speed__1: Sprite = null
-let lif = 0
 let Countd = 0
 let Purchased_S1 = 0
 let Player_Character: Sprite = null
 let Store = 0
+game.splash("Hacker Defense", "By: Thomas Carlisle")
+game.showLongText("This is my game hacker defense!", DialogLayout.Full)
 let Level = 1
 Store = 0
 scene.setBackgroundImage(assets.image`Stage`)
 Player_Character = sprites.create(assets.image`Operating System`, SpriteKind.Player)
+let Hacker = sprites.create(assets.image`Hacker`, SpriteKind.Enemy)
+Hacker.setPosition(163, 51)
 Player_Character.setScale(0.5, ScaleAnchor.Middle)
 controller.moveSprite(Player_Character, 50, 50)
 Player_Character.setStayInScreen(true)
 Purchased_S1 = 0
-info.startCountdown(15)
+info.startCountdown(30)
 music.play(music.createSong(assets.song`Music`), music.PlaybackMode.LoopingInBackground)
+forever(function () {
+    Countd = info.countdown()
+    pauseUntil(() => Store != 1)
+    if (Level == 4 && Countd == 0) {
+    	
+    } else if (Countd == 0) {
+        game.showLongText("You have completed this level, prepare for the next!", DialogLayout.Full)
+        Level += 1
+        info.startCountdown(60)
+    }
+})
 forever(function () {
     Coin = sprites.createProjectileFromSide(assets.image`Coin`, -90, 0)
     Coin.y = randint(40, 96)
@@ -88,12 +133,14 @@ forever(function () {
     100,
     true
     )
-    pause(1000)
+    pause(750)
     pauseUntil(() => Store != 1)
 })
 forever(function () {
     Enemy_Attacks = sprites.createProjectileFromSide(assets.image`Worm Virus`, -90, 0)
-    Enemy_Attacks.y = randint(40, 96)
+    place = randint(40, 96)
+    Hacker.y = place
+    Enemy_Attacks.y = place
     Enemy_Attacks.setKind(SpriteKind.Enemy)
     animation.runImageAnimation(
     Enemy_Attacks,
