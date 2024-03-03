@@ -64,6 +64,16 @@
         "mimeType": "image/x-mkcd-f4",
         "displayName": "Hacker"
     },
+    "image9": {
+        "data": "hwQQABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAACYCAAAAAAAAJgIAAAAAACAmYkAAAAAAICZiQAAAAAAgJmJAAAAAAAAiAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+        "mimeType": "image/x-mkcd-f4",
+        "displayName": "Counter Measure"
+    },
+    "image10": {
+        "data": "hwQQABAAAAAAAAAAAAAAAAAAAAAAAAAAABEREREREQEQAAAAAAAAAQEAAAAAAAABAQAAAAAAAAEBAAAAAAAAAQEAAAAAAAABAQAAAAAAAAEBAAAAAAAAAQEAAAAQAAABEAAAAAAAAAEAERERERERAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+        "mimeType": "image/x-mkcd-f4",
+        "displayName": "exit"
+    },
     "{$)z?}bfV-l)2pmioGXr": {
         "namespace": "myImages",
         "id": "{$)z?}bfV-l)2pmioGXr",

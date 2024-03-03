@@ -1,32 +1,54 @@
 namespace SpriteKind {
     export const Shop_Item = SpriteKind.create()
 }
-controller.B.onEvent(ControllerButtonEvent.Pressed, function () {
-    Store = 1
-    Countd = info.countdown()
-    info.stopCountdown()
-    effects.blizzard.startScreenEffect()
-    pause(1500)
-    scene.setBackgroundImage(assets.image`Store Background`)
-    effects.blizzard.endScreenEffect()
-    Player_Character.setPosition(80, 110)
-    Speed__1 = sprites.create(assets.image`Speed 1`, SpriteKind.Shop_Item)
-    Speed__1.setPosition(30, 55)
-    Speed__2 = sprites.create(assets.image`Speed 2`, SpriteKind.Shop_Item)
-    Speed__2.setPosition(60, 55)
-    Life__1 = sprites.create(assets.image`Heart 1`, SpriteKind.Shop_Item)
-    Life__1.setPosition(90, 55)
-    Life__3 = sprites.create(assets.image`Life 3`, SpriteKind.Shop_Item)
-    Life__3.setPosition(120, 55)
-    THE_SCRIPT = sprites.create(assets.image`THE SCRIPT`, SpriteKind.Shop_Item)
-    THE_SCRIPT.setPosition(75, 86)
+controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
+    if (activation == 1) {
+        Countermeasure = sprites.createProjectileFromSprite(assets.image`Counter Measure`, Player_Character, 90, 0)
+        Countermeasure.setKind(SpriteKind.Enemy)
+        pause(1000)
+    }
 })
-function The_SCRIPT () {
-	
-}
+sprites.onOverlap(SpriteKind.Enemy, SpriteKind.Enemy, function (sprite, otherSprite) {
+    Hacker__Health += -1
+})
+info.onCountdownEnd(function () {
+    if (Hacker__Health == 0) {
+        game.setGameOverMessage(true, "You successfully beat the hacker!")
+        game.setGameOverPlayable(true, music.melodyPlayable(music.powerUp), false)
+        game.gameOver(true)
+    } else if (Level == 4) {
+        game.setGameOverMessage(true, "You survived the attack!")
+        game.setGameOverPlayable(true, music.melodyPlayable(music.powerUp), false)
+        game.gameOver(true)
+    } else {
+        Store = 1
+        effects.blizzard.startScreenEffect()
+        pause(1500)
+        scene.setBackgroundImage(assets.image`Store Background`)
+        effects.blizzard.endScreenEffect()
+        Player_Character.setPosition(80, 110)
+        Speed__1 = sprites.create(assets.image`Speed 1`, SpriteKind.Shop_Item)
+        Speed__1.setPosition(30, 55)
+        Speed__2 = sprites.create(assets.image`Speed 2`, SpriteKind.Shop_Item)
+        Speed__2.setPosition(60, 55)
+        Life__1 = sprites.create(assets.image`Heart 1`, SpriteKind.Shop_Item)
+        Life__1.setPosition(90, 55)
+        Life__3 = sprites.create(assets.image`Life 3`, SpriteKind.Shop_Item)
+        Life__3.setPosition(120, 55)
+        THE_SCRIPT = sprites.create(assets.image`THE SCRIPT`, SpriteKind.Shop_Item)
+        THE_SCRIPT.setPosition(75, 86)
+        exit = sprites.create(assets.image`exit`, SpriteKind.Shop_Item)
+        exit.setPosition(15, 103)
+    }
+})
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Projectile, function (sprite, otherSprite) {
     otherSprite.destroy()
     info.changeScoreBy(1)
+})
+info.onLifeZero(function () {
+    game.setGameOverMessage(false, "Seriously, You better beat him next time...")
+    game.setGameOverEffect(false, effects.dissolve)
+    game.setGameOverPlayable(false, music.melodyPlayable(music.powerDown), false)
 })
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Shop_Item, function (sprite, otherSprite) {
     if (otherSprite == Speed__1 && Purchased_S1 == 0) {
@@ -67,7 +89,7 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Shop_Item, function (sprite, oth
         info.changeScoreBy(-18)
         controller.moveSprite(Player_Character, 100, 100)
         sprites.destroy(Speed__2)
-        Speed__2 = sprites.create(assets.image`S2 Puc`, SpriteKind.Player)
+        Speed__2 = sprites.create(assets.image`S2 Puc`, SpriteKind.Shop_Item)
         Speed__2.setPosition(60, 55)
     } else if (otherSprite == Life__1) {
         Player_Character.setPosition(80, 110)
@@ -79,51 +101,58 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Shop_Item, function (sprite, oth
         info.changeLifeBy(3)
     } else if (otherSprite == THE_SCRIPT) {
         info.changeScoreBy(-40)
-        The_SCRIPT()
+        activation = 1
+    } else if (otherSprite == exit) {
+        Store += -1
+        sprites.destroyAllSpritesOfKind(SpriteKind.Shop_Item)
+        scene.setBackgroundImage(assets.image`Stage`)
+        game.showLongText("You have completed this level, prepare for the next!", DialogLayout.Full)
+        Level += 1
+        info.startCountdown(60)
     }
 })
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSprite) {
-    otherSprite.destroy()
-    info.changeLifeBy(-1)
+    if (activation == 1) {
+        otherSprite.destroy()
+        info.changeLifeBy(1)
+    } else {
+        otherSprite.destroy()
+        info.changeLifeBy(-1)
+    }
 })
 let place = 0
 let Enemy_Attacks: Sprite = null
 let Coin: Sprite = null
 let Purchased_S2 = 0
+let exit: Sprite = null
 let THE_SCRIPT: Sprite = null
 let Life__3: Sprite = null
 let Life__1: Sprite = null
 let Speed__2: Sprite = null
 let Speed__1: Sprite = null
-let Countd = 0
+let Countermeasure: Sprite = null
+let activation = 0
 let Purchased_S1 = 0
 let Player_Character: Sprite = null
 let Store = 0
+let Level = 0
+let Hacker__Health = 0
 game.splash("Hacker Defense", "By: Thomas Carlisle")
-game.showLongText("This is my game hacker defense!", DialogLayout.Full)
-let Level = 1
+game.showLongText("This is my game hacker defense! Dodge the hacker and his attacks. You will go to a shop between levels, the script is the final upgrade and gives offensive capibilities.", DialogLayout.Full)
+game.showLongText("You are the operating system, directly relating to my project and you must fight the hacker(s).", DialogLayout.Full)
+Hacker__Health = 5
+Level = 1
 Store = 0
 scene.setBackgroundImage(assets.image`Stage`)
 Player_Character = sprites.create(assets.image`Operating System`, SpriteKind.Player)
 let Hacker = sprites.create(assets.image`Hacker`, SpriteKind.Enemy)
-Hacker.setPosition(163, 51)
+Hacker.setPosition(150, 51)
 Player_Character.setScale(0.5, ScaleAnchor.Middle)
 controller.moveSprite(Player_Character, 50, 50)
 Player_Character.setStayInScreen(true)
 Purchased_S1 = 0
 info.startCountdown(30)
 music.play(music.createSong(assets.song`Music`), music.PlaybackMode.LoopingInBackground)
-forever(function () {
-    Countd = info.countdown()
-    pauseUntil(() => Store != 1)
-    if (Level == 4 && Countd == 0) {
-    	
-    } else if (Countd == 0) {
-        game.showLongText("You have completed this level, prepare for the next!", DialogLayout.Full)
-        Level += 1
-        info.startCountdown(60)
-    }
-})
 forever(function () {
     Coin = sprites.createProjectileFromSide(assets.image`Coin`, -90, 0)
     Coin.y = randint(40, 96)
